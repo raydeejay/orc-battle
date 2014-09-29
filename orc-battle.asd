@@ -8,5 +8,5 @@
   :depends-on (#:ansi-color)
   :components ((:file "package")
                (:file "player")
+               (:file "monster")
                (:file "orc-battle")))
-
