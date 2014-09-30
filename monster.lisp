@@ -77,3 +77,14 @@
 
 (defun monsters-dead ()
   (every #'monster-dead *monsters*))
+
+;; monster initialization
+(defun init-monsters ()
+  (setf *monsters*
+        (map 'vector
+             (lambda (x)
+               (declare (ignore x))
+               (funcall (nth (random (length *monster-builders*))
+                             *monster-builders*)))
+             (make-array *monster-num*))))
+

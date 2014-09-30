@@ -118,16 +118,6 @@
              (monster-hit (random-monster) 1))))
     (otherwise (player-attack))))
 
-;; monster initialization
-(defun init-monsters ()
-  (setf *monsters*
-        (map 'vector
-             (lambda (x)
-               (declare (ignore x))
-               (funcall (nth (random (length *monster-builders*))
-                             *monster-builders*)))
-             (make-array *monster-num*))))
-
 ;; main loop
 (defun game-loop ()
   (unless (or (player-dead) (monsters-dead))
