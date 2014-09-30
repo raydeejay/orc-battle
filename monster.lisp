@@ -57,7 +57,7 @@
                (pick-monster))
         (let ((m (aref *monsters* (1- x))))
           (if (monster-dead m)
-              (progn (princa "That monster is alread dead.")
+              (progn (princa "That monster is already dead.")
                      (pick-monster))
               m)))))
 
