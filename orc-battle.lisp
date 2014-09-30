@@ -135,6 +135,7 @@
 
 ;; exported function to start the game
 (defun start ()
+  (setf *random-state* (make-random-state t))
   (init-monsters)
   (init-player)
   (game-loop)
