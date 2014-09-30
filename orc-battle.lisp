@@ -62,3 +62,6 @@
   (fresh-line)
   (sb-ext:quit))
 
+(defun main (argv)
+  (declare (ignore argv))
+  (start))
