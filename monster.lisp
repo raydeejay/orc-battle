@@ -70,7 +70,7 @@
            (fresh-line)
            (princa "    " :bold (format nil "~2d" (incf x)) ". " :reset)
            (if (monster-dead m)
-               (princa :magenta "**dead**" :reset)
+               (princa :black :bold "**dead**" :reset)
                (progn (princa "[" (format nil "~2d" (monster-health m)) "] ")
                       (monster-show m))))
          *monsters*)))
