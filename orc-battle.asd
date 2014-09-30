@@ -9,4 +9,8 @@
   :components ((:file "package")
                (:file "player")
                (:file "monster")
+               (:file "orc")
+               (:file "hydra")
+               (:file "slime-mold")
+               (:file "brigand")
                (:file "orc-battle")))
