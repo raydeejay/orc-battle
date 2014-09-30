@@ -29,7 +29,9 @@
     (#\r (dotimes (x (1+ (randval (truncate (/ *player-strength* 3)))))
            (unless (monsters-dead)
              (monster-hit (random-monster) 1))))
-    (otherwise (player-attack))))
+    (#\q (sb-ext:exit))
+    (otherwise (read-char)
+               (player-attack))))
 
 ;; main loop
 (defun game-loop ()
