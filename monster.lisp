@@ -50,7 +50,7 @@
 (defun pick-monster ()
   (princa :cyan :bold "Monster #: " :reset)
   (finish-output nil)
-  (let ((x (read)))
+  (let ((x (parse-integer (read-line))))
     (fresh-line)
     (if (not (and (integerp x) (>= x 1) (<= x *monster-num*)))
         (progn (princa "That is not a valid monster number.")
