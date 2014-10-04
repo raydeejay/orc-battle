@@ -5,7 +5,7 @@
   :description "An epic battle against orcs. And other stuff."
   :author "Sergi Reyner <sergi.reyner@gmail.com>"
   :license "MIT"
-  :depends-on (#:ansi-color)
+  :depends-on (#:ansi-color #:lispbuilder-sdl)
   :components ((:file "package")
                (:file "player")
                (:file "monster")
