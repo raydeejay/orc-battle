@@ -4,10 +4,6 @@
 
 ;;; "orc-battle" goes here. Hacks and glory await!
 
-;; selectively run code if inside/outside SLIME
-;; #+:swank ()
-;; #-:swank ()
-
 ;; a little helper function
 (defun randval (n)
   (1+ (random (max 1 n))))
