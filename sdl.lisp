@@ -16,3 +16,10 @@
 (defun y-in-pixels (y)
   (* y (sdl:char-height sdl:*default-font*)))
 
+(defun clear ()
+  (sdl:clear-display sdl:*black*))
+
+(defun clear-rectangle (x y w h)
+  (sdl:draw-box-* (x-in-pixels x) (y-in-pixels y)
+                  (x-in-pixels w) (y-in-pixels h)
+                  :color sdl:*black*))
