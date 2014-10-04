@@ -7,6 +7,7 @@
   :license "MIT"
   :depends-on (#:ansi-color #:lispbuilder-sdl)
   :components ((:file "package")
+               (:file "sdl")
                (:file "player")
                (:file "monster")
                (:file "orc")
