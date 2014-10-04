@@ -64,6 +64,21 @@
               m)))))
 
 (defun show-monsters ()
+  (print-on-sdl "Your foes:" :x 1 :y 13 :color sdl:*red*)
+  (let ((n 1))
+    (map 'list
+         (lambda (m)
+           (print-on-sdl (format nil "~2d. " n)
+                         :x 5 :y (+ 14 n))
+           (if (monster-dead m)
+               (print-on-sdl "**dead**" :x 9 :y (+ 14 n) :color sdl:*blue*)
+               (progn (print-on-sdl (format nil "[~2d]" (monster-health m) 3))
+                      ;;(monster-show m)
+                      ))
+           (incf n))
+         *monsters*)))
+
+(defun old-show-monsters ()
   (fresh-line)
   (princa :red :bold "Your foes:" :reset)
   (let ((x 0))
