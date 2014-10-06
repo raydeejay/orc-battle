@@ -4,10 +4,12 @@
 
 ;;; "orc-battle" goes here. Hacks and glory await!
 
-(defvar *console-width* 80)
-(defvar *console-height* 40)
+(defparameter *console-width* 80)
+(defparameter *console-height* 40)
 
-(defvar *input-mode* nil)
+(defparameter *input-mode* nil)
+
+(defparameter *input-modes* ())
 
 ;; a little helper function
 (defun randval (n)
