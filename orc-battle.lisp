@@ -74,7 +74,8 @@
              (> (length *text-input*) 0))
     (setf *text-input* (subseq *text-input* 0 (1- (length *text-input*)))))
   (when (sdl:key= key :sdl-key-return)
-    (funcall *attack-type* (parse-integer *text-input* :junk-allowed t)))
+    (funcall *attack-type* (parse-integer *text-input* :junk-allowed t))
+    (setf *text-input* ""))
   (when (<= (char-code #\0) unicode (char-code #\9))
     (setf *text-input* (format nil "~a~c"
                                *text-input*
@@ -91,13 +92,12 @@
   (monster-hit (get-monster-by-number n)
                (+ 2 (randval (ash *player-strength* -1)))))
 
-(defun double-swing ()
+(defun double-swing (n)
   (let ((x (randval (truncate (/ *player-strength* 6)))))
-    (princa "Your double swing has a strength of " x)
-    (fresh-line)
-    (monster-hit (pick-monster) x)
+    (print-on-sdl (format nil "Your double swing has a strength of ~d." x))
+    (monster-hit (get-monster-by-number n) x)
     (unless (monsters-dead)
-      (monster-hit (pick-monster) x))))
+      (monster-hit (get-monster-by-number n) x))))
 
 (defun roundhouse ()
   (dotimes (x (1+ (randval (truncate (/ *player-strength* 3)))))
@@ -116,13 +116,11 @@
   (let ((x (parse-integer (read-line))))
     (fresh-line)
     (if (not (and (integerp x) (>= x 1) (<= x *monster-num*)))
-        (progn (princa "That is not a valid monster number.")
-               (fresh-line)
+        (progn (print-on-sdl "That is not a valid monster number.")
                (pick-monster))
         (let ((m (aref *monsters* (1- x))))
           (if (monster-dead m)
-              (progn (princa "That monster is already dead.")
-                     (fresh-line)
+              (progn (print-on-sdl "That monster is already dead.")
                      (pick-monster))
               m)))))
 
@@ -143,10 +141,9 @@
 
 (defun end-game ()
   (when (player-dead)
-    (princa :red "You have been killed. Game Over." :reset))
+    (print-on-sdl "You have been killed. Game Over."))
   (when (monsters-dead)
-    (princa :green :bold "Congratulations! You have vanquished all of your foes." :reset)
-    (fresh-line)))
+    (print-on-sdl "Congratulations! You have vanquished all of your foes.")))
 
 ;; main loop
 (defun old-game-loop ()
