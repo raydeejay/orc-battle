@@ -12,6 +12,10 @@
 (defparameter *text-input* "")
 (defparameter *attack-type* nil)
 
+(defparameter *font-big* (sdl:initialise-font sdl:*font-10x20*))
+(defparameter *font-small* (sdl:initialise-font sdl:*font-8x8*))
+
+
 ;; a little helper function
 (defun randval (n)
   (1+ (random (max 1 n))))
@@ -31,12 +35,13 @@
   (init-monsters)
   (init-player)
   (sdl:with-init ()
-    (sdl:initialise-default-font sdl:*font-10x20*)
     (sdl:window 640 480 :title-caption "Orc Battle")
+    (sdl:set-default-font *font-small*)
     (sdl:resize-window (x-in-pixels *console-width*)
                        (y-in-pixels *console-height*))
+    (sdl:set-default-font *font-big*)
     (print-on-sdl "* ORC BATTLE *" :x 23 :y 2)
-    (sdl:set-default-font (sdl:initialise-font sdl:*font-8x8*))
+    (sdl:set-default-font *font-small*)
     (sdl:enable-unicode)   ; may be better to enable it only when reading strings
     (game-loop))
   (fresh-line)
