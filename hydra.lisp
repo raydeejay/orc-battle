@@ -7,26 +7,19 @@
 (push #'make-hydra *monster-builders*)
 
 (defmethod monster-show ((m hydra))
-  (princa "A malicious hydra with ")
-  (princa (monster-health m))
-  (princa " heads."))
+  (print-on-sdl (format nil
+                        "A malicious hydra with ~d heads."
+                        (monster-health m))))
 
 (defmethod monster-hit ((m hydra) x)
   (decf (monster-health m) x)
   (if (monster-dead m)
-      (progn (princa "The corpse of the fully decapitated and decapacitated hydra falls to the floor!")
-             (fresh-line))
-      (progn (princa "You lop off "
-                     x
-                     " of the hydra's heads! ")
-             (fresh-line))))
+      (print-on-sdl "The corpse of the fully decapitated and decapacitated hydra falls to the floor!")
+      (print-on-sdl (format nil "You lop off ~d of the hydra's heads!" x))))
 
 (defmethod monster-attack ((m hydra))
   (let ((x (randval (ash (monster-health m) -1))))
-    (princa "A hydra attacks you with "
-            x
-            " of its heads! It also grows back one more head! ")
-    (fresh-line)
+    (print-on-sdl (format nil "A hydra attacks you with ~d of its heads! It also grows back one more head! " x))
     (incf (monster-health m))
     (decf *player-health* x)))
 

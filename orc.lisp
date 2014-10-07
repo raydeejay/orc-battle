@@ -7,14 +7,10 @@
 (push #'make-orc *monster-builders*)
 
 (defmethod monster-show ((m orc))
-  (princa "A wicked orc with a level ")
-  (princa (orc-club-level m))
-  (princa " club"))
+  (print-on-sdl (format nil "A wicked orc with a level ~d club"
+                        (orc-club-level m))))
 
 (defmethod monster-attack ((m orc))
   (let ((x (randval (orc-club-level m))))
-    (princa "An orc swings his club at you and knocks off "
-            x
-            " of your health points. ")
-    (fresh-line)
+    (print-on-sdl (format nil "An orc swings his club at you and knocks off ~d of your health points." x))
     (decf *player-health* x)))

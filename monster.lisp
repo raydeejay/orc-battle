@@ -19,22 +19,14 @@
 (defmethod monster-hit (m x)
   (decf (monster-health m) x)
   (if (monster-dead m)
-      (progn (princa :green
-                     "You killed the "
-                     (type-of m)
-                     "! "
-                     :reset))
-      (progn (princa "You hit the "
-                     (type-of m)
-                     ", knocking off "
-                     x
-                     " health points! ")))
-  (fresh-line))
+      (print-on-sdl(format nil "You killed the ~a!" (type-of m)))
+      (print-on-sdl (format nil "You hit the ~a, knocking off ~d health points"
+                            (type-of m) x))))
 
 (defgeneric monster-show (m))
 
 (defmethod monster-show (m)
-  (princa "A fierce " (type-of m)))
+  (print-on-sdl (format nil "A fierce ~a" (type-of m))))
 
 (defgeneric monster-attack (m))
 
@@ -55,25 +47,11 @@
            (print-on-sdl (format nil "~2d. " n)
                          :x 5 :y (+ 14 n))
            (if (monster-dead m)
-               (print-on-sdl "**dead**" :x 9 :y (+ 14 n) :color sdl:*blue*)
-               (progn (print-on-sdl (format nil "[~2d]" (monster-health m) 3))
-                      ;;(monster-show m)
+               (print-on-sdl "**dead**" :x 14 :y (+ 14 n) :color sdl:*blue*)
+               (progn (print-on-sdl (format nil "[~2d] " (monster-health m)))
+                      (monster-show m)
                       ))
            (incf n))
-         *monsters*)))
-
-(defun old-show-monsters ()
-  (fresh-line)
-  (princa :red :bold "Your foes:" :reset)
-  (let ((x 0))
-    (map 'list
-         (lambda (m)
-           (fresh-line)
-           (princa "    " :bold (format nil "~2d" (incf x)) ". " :reset)
-           (if (monster-dead m)
-               (princa :black :bold "**dead**" :reset)
-               (progn (princa "[" (format nil "~2d" (monster-health m)) "] ")
-                      (monster-show m))))
          *monsters*)))
 
 (defun monsters-dead ()
