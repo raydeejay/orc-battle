@@ -27,23 +27,6 @@
                 :x 2 :y 11 :color sdl:*yellow*)
   (sdl:update-display))
 
-(defun stab ()
-  (monster-hit (pick-monster)
-               (+ 2 (randval (ash *player-strength* -1)))))
-
-(defun double-swing ()
-  (let ((x (randval (truncate (/ *player-strength* 6)))))
-    (princa "Your double swing has a strength of " x)
-    (fresh-line)
-    (monster-hit (pick-monster) x)
-    (unless (monsters-dead)
-      (monster-hit (pick-monster) x))))
-
-(defun roundhouse ()
-  (dotimes (x (1+ (randval (truncate (/ *player-strength* 3)))))
-    (unless (monsters-dead)
-      (monster-hit (random-monster) 1))))
-
 ;; turn function
 (defun old-player-attack ()
   (print-on-sdl "Attack style: [s]tab [d]ouble swing [r]oundhouse:"

@@ -10,6 +10,7 @@
 (defparameter *game-mode* nil)
 (defparameter *input-modes* ())
 (defparameter *text-input* "")
+(defparameter *attack-type* nil)
 
 ;; a little helper function
 (defun randval (n)
@@ -20,6 +21,7 @@
   (setf *game-mode* #'player-attack)
   (setf *input-modes* ())
   (setf *text-input* "")
+  (setf *attack-type* nil)
   (push #'global-input-mode *input-modes*)
   (push #'attack-input-mode *input-modes*))
 
@@ -51,11 +53,14 @@
   (declare (ignorable unicode))
   (clear-rectangle 1 40 23 3)
   (when (sdl:key= key :sdl-key-s)
-    (print-on-sdl "Pressed key S!" :x 1 :y 40))
+    (print-on-sdl "You choose to stab a monster!" :x 1 :y 40)
+    (setf *attack-type* #'stab))
   (when (sdl:key= key :sdl-key-d)
-    (print-on-sdl "Pressed key D!" :x 1 :y 40))
+    (print-on-sdl "You decide to attempt a double swing." :x 1 :y 40)
+    (setf *attack-type* #'double-swing))
   (when (sdl:key= key :sdl-key-r)
-    (print-on-sdl "Pressed key R!" :x 1 :y 40))
+    (print-on-sdl "Roundhouse of hits!" :x 1 :y 40)
+    (setf *attack-type* #'roundhouse))
   (when (member key '(:sdl-key-s :sdl-key-d :sdl-key-r))
     (pop *input-modes*)
     (push #'pickup-monster-input-mode *input-modes*))
@@ -68,6 +73,8 @@
   (when (and (sdl:key= key :sdl-key-backspace)
              (> (length *text-input*) 0))
     (setf *text-input* (subseq *text-input* 0 (1- (length *text-input*)))))
+  (when (sdl:key= key :sdl-key-return)
+    (funcall *attack-type* (parse-integer *text-input* :junk-allowed t)))
   (when (<= (char-code #\0) unicode (char-code #\9))
     (setf *text-input* (format nil "~a~c"
                                *text-input*
@@ -76,10 +83,33 @@
                 :x 1 :y 42
                 :color sdl:*cyan*))
 
+(defun get-monster-by-number (n)
+  (aref *monsters* (1- n)))
+
+;; attack functions
+(defun stab (n)
+  (monster-hit (get-monster-by-number n)
+               (+ 2 (randval (ash *player-strength* -1)))))
+
+(defun double-swing ()
+  (let ((x (randval (truncate (/ *player-strength* 6)))))
+    (princa "Your double swing has a strength of " x)
+    (fresh-line)
+    (monster-hit (pick-monster) x)
+    (unless (monsters-dead)
+      (monster-hit (pick-monster) x))))
+
+(defun roundhouse ()
+  (dotimes (x (1+ (randval (truncate (/ *player-strength* 3)))))
+    (unless (monsters-dead)
+      (monster-hit (random-monster) 1))))
+
+;; select an attack type
 (defun player-attack ()
   (print-on-sdl "Attack style: [s]tab [d]ouble swing [r]oundhouse:"
                 :x 1 :y 30 :color sdl:*cyan*))
 
+;; select the monster to attack
 (defun pick-monster ()
   (princa :cyan :bold "Monster #: " :reset)
   (finish-output nil)
