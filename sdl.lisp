@@ -11,7 +11,6 @@
                            (* x (sdl:char-width sdl:*default-font*))
                            (* y (sdl:char-height sdl:*default-font*))
                            :color color)
-;;  (sdl:update-display)
   (setf *current-x* (+ x (length str)))
   (setf *current-y* y)
   (when (>= *current-x* *console-width*)
