@@ -15,7 +15,6 @@
 (defparameter *font-big* (sdl:initialise-font sdl:*font-10x20*))
 (defparameter *font-small* (sdl:initialise-font sdl:*font-8x8*))
 
-
 ;; a little helper function
 (defun randval (n)
   (1+ (random (max 1 n))))
