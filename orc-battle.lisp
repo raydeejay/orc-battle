@@ -42,7 +42,7 @@
     (sdl:set-default-font *font-big*)
     (print-on-sdl "* ORC BATTLE *" :x 23 :y 2)
     (sdl:set-default-font *font-small*)
-    (sdl:enable-unicode)   ; may be better to enable it only when reading strings
+    (sdl:enable-unicode)   ; may be better to enable it only when reading strings?
     (game-loop))
   (fresh-line)
   (end-game))
@@ -56,37 +56,41 @@
 
 (defun attack-input-mode (key unicode)
   (declare (ignorable unicode))
-  (clear-rectangle 1 40 23 3)
+  (clear-rectangle 1 31 23 3)
   (when (sdl:key= key :sdl-key-s)
-    (print-on-sdl "You choose to stab a monster!" :x 1 :y 40)
+    (print-on-sdl "You choose to stab a monster!" :x 1 :y 31)
     (setf *attack-type* #'stab))
   (when (sdl:key= key :sdl-key-d)
-    (print-on-sdl "You decide to attempt a double swing." :x 1 :y 40)
+    (print-on-sdl "You decide to attempt a double swing." :x 1 :y 31)
     (setf *attack-type* #'double-swing))
   (when (sdl:key= key :sdl-key-r)
-    (print-on-sdl "Roundhouse of hits!" :x 1 :y 40)
+    (print-on-sdl "Roundhouse of hits!" :x 1 :y 31)
     (setf *attack-type* #'roundhouse))
   (when (member key '(:sdl-key-s :sdl-key-d :sdl-key-r))
     (pop *input-modes*)
-    (push #'pickup-monster-input-mode *input-modes*))
-  ;;(print-on-sdl (format nil "From unicode: ~c ~d!" (code-char unicode) unicode)
-  ;;              :x 1 :y 41)
-  ) ; <-- careful
+    (push #'pickup-monster-input-mode *input-modes*)
+    (setf *game-mode* #'pick-monster)))
 
 (defun pickup-monster-input-mode (key unicode)
   (clear-rectangle 1 42 23 3)
-  (when (and (sdl:key= key :sdl-key-backspace)
-             (> (length *text-input*) 0))
-    (setf *text-input* (subseq *text-input* 0 (1- (length *text-input*)))))
-  (when (sdl:key= key :sdl-key-return)
-    (funcall *attack-type* (parse-integer *text-input* :junk-allowed t))
-    (setf *text-input* ""))
+  (when (> (length *text-input*) 0)
+    (when (sdl:key= key :sdl-key-backspace)
+      (setf *text-input* (subseq *text-input* 0 (1- (length *text-input*)))))
+    (when (or (sdl:key= key :sdl-key-return)
+              (sdl:key= key :sdl-key-kp-enter))
+      (let ((x (parse-integer *text-input*)))
+        (when (< 0 x (length *monsters*))
+          (funcall *attack-type* (parse-integer *text-input* :junk-allowed t))
+          (setf *text-input* "")
+          (pop *input-modes*)
+          (push #'attack-input-mode *input-modes*)
+          (setf *game-mode* #'player-attack)))))
   (when (<= (char-code #\0) unicode (char-code #\9))
     (setf *text-input* (format nil "~a~c"
                                *text-input*
                                (code-char unicode))))
-  (print-on-sdl (format nil "Monster#: ~a" *text-input*)
-                :x 1 :y 42
+  (print-on-sdl (format nil "Monster #: ~a" *text-input*)
+                :x 1 :y 32
                 :color sdl:*cyan*))
 
 (defun get-monster-by-number (n)
@@ -116,6 +120,10 @@
 
 ;; select the monster to attack
 (defun pick-monster ()
+  (print-on-sdl "Monster #: " :x 1 :y 32 :color sdl:*cyan*))
+
+;; select the monster to attack
+(defun old-pick-monster ()
   (princa :cyan :bold "Monster #: " :reset)
   (finish-output nil)
   (let ((x (parse-integer (read-line))))
