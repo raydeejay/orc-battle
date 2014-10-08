@@ -48,7 +48,7 @@
            (print-on-sdl (format nil "~2d. " n)
                          :x 5 :y (+ 14 n))
            (if (monster-dead m)
-               (print-on-sdl "**dead**" :x 14 :y (+ 14 n) :color sdl:*magenta*)
+               (print-on-sdl "**dead**" :x 9 :y (+ 14 n) :color sdl:*magenta*)
                (progn (print-on-sdl (format nil "[~2d] " (monster-health m)))
                       (monster-show m)
                       ))

@@ -55,7 +55,7 @@
 
 (defun attack-input-mode (key unicode)
   (declare (ignorable unicode))
-  (clear-rectangle 1 31 23 3)
+  (clear-rectangle 1 31 80 3)
   (when (sdl:key= key :sdl-key-s)
     (print-on-sdl "You choose to stab a monster!" :x 1 :y 31)
     (setf *attack-type* #'stab))
@@ -71,7 +71,7 @@
     (setf *game-mode* #'pick-monster)))
 
 (defun pickup-monster-input-mode (key unicode)
-  (clear-rectangle 1 42 23 3)
+  (clear-rectangle 1 32 80 3)
   (when (> (length *text-input*) 0)
     (when (sdl:key= key :sdl-key-backspace)
       (setf *text-input* (subseq *text-input* 0 (1- (length *text-input*)))))
