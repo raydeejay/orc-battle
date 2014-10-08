@@ -116,6 +116,8 @@
 
 ;; select an attack type
 (defun player-attack ()
+  (when (or (player-dead) (monsters-dead))
+    (end-game))
   (print-on-sdl "Attack style: [s]tab [d]ouble swing [r]oundhouse:"
                 :x 1 :y 30 :color sdl:*cyan*))
 
@@ -157,7 +159,8 @@
   (when (player-dead)
     (print-on-sdl "You have been killed. Game Over."))
   (when (monsters-dead)
-    (print-on-sdl "Congratulations! You have vanquished all of your foes.")))
+    (print-on-sdl "Congratulations! You have vanquished all of your foes."))
+  (sdl:push-quit-event))
 
 ;; main loop
 (defun old-game-loop ()
