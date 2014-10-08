@@ -41,7 +41,7 @@
     (sdl:set-default-font *font-big*)
     (print-on-sdl "* ORC BATTLE *" :x 23 :y 2)
     (sdl:set-default-font *font-small*)
-    (sdl:enable-unicode)   ; may be better to enable it only when reading strings?
+    (sdl:enable-unicode)               ; slight irrelevant performance hit
     (game-loop))
   (fresh-line)
   (end-game))
