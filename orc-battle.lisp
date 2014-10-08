@@ -107,7 +107,8 @@
     (unless (monsters-dead)
       (monster-hit (get-monster-by-number n) x))))
 
-(defun roundhouse ()
+(defun roundhouse (n)
+  (declare (ignorable n))
   (dotimes (x (1+ (randval (truncate (/ *player-strength* 3)))))
     (unless (monsters-dead)
       (monster-hit (random-monster) 1))))
