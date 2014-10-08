@@ -79,6 +79,7 @@
               (sdl:key= key :sdl-key-kp-enter))
       (let ((x (parse-integer *text-input*)))
         (when (< 0 x (1+ (length *monsters*)))
+          (print-on-sdl "" :x 1 :y 34)
           (funcall *attack-type* (parse-integer *text-input* :junk-allowed t))
           (setf *text-input* "")
           (pop *input-modes*)
